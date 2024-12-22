@@ -1,1 +1,8 @@
-python_version == "3.12.7"
+black==24.10.0
+click==8.1.8
+mypy-extensions==1.0.0
+packaging==24.2
+pathspec==0.12.1
+platformdirs==4.3.6
+SQLAlchemy==2.0.36
+typing_extensions==4.12.2
