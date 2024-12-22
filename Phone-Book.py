@@ -1,16 +1,46 @@
 import sqlite3
+from sqlalchemy.sql import text
+from sqlalchemy.dialects import sqlite
 
 db = sqlite3.connect('PhoneBook.db')
 
 cursor = db.cursor()
 
+CREATE_TABLE_QUERY = """
+    CREATE TABLE IF NOT EXISTS PhoneBook(
+        name VARCHAR(30),
+        number VARCHAR(30),
+        notes VARCHAR(30)
+    )
+"""
 
-# создание БД
-# cursor.execute("""CREATE TABLE PhoneBook(
-#     name VARCHAR(30),
-#     number VARCHAR(30),
-#     notes VARCHAR(30)
-#     )""")
+
+def clean_sqlalchemy_query(query: str) -> str:
+    """
+    Removes unnecessary whitespaces and formats an SQLAlchemy query.
+
+    Args:
+        query (str): The raw SQL query as a string.
+
+    Returns:
+        str: The cleaned and formatted SQL query.
+    """
+    # Create a SQLAlchemy text object
+    sql_query = text(query)
+    # Compile the query to standard SQL using a specific dialect
+    compiled_query = sql_query.compile(dialect=sqlite.dialect())
+    # Convert compiled query to a string
+    formatted_query = str(compiled_query)
+    # Remove extra whitespace
+    formatted_query = " ".join(formatted_query.split())
+    return formatted_query
+
+
+cleaned_query = clean_sqlalchemy_query(CREATE_TABLE_QUERY)
+
+cursor.execute(
+    cleaned_query
+)
 
 
 while True:
